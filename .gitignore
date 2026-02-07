@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+
+# Files
+data/defects/schottky/
+data/defects/frenkel/
+data/doped/
+
 # Distribution / packaging
 .Python
 build/
