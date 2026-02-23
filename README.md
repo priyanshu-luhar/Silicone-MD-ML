@@ -146,7 +146,8 @@ This project builds two RNN-based models to approximate that process.
 
 ---
 
-# Architecture Overview
+
+## Architecture Overview
 
 ```mermaid
 flowchart TD
@@ -154,7 +155,7 @@ flowchart TD
   A[ForceField File] --> B[ReaxFF Parser]
   B --> C[ForceField Vector]
 
-  D[Starting Structure .xyz] --> E[Structure Parser]
+  D[Starting Structure xyz] --> E[Structure Parser]
   E --> F[Geometry Features]
   F --> G[Initial Bond Defect Detection]
 
@@ -162,7 +163,7 @@ flowchart TD
   J[Step Schedule] --> I
   K[RMD Timestep] --> L[Time Conditioning]
 
-  I --> M[Per-Step Conditioning: T(t), step_id, dt]
+  I --> M[Per Step Conditioning]
 
   C --> N[Minimizer RNN]
   F --> N
@@ -178,10 +179,11 @@ flowchart TD
   P --> S[Raw Defect Signals]
 
   Q --> T[Defect Estimator]
-  T --> U[Expected Schottky over Steps]
-  T --> V[Expected Frenkel over Steps]
+  T --> U[Expected Schottky Over Steps]
+  T --> V[Expected Frenkel Over Steps]
 
   Q --> W[MLMD Final Structure]
+```
 
 ## Status
 
