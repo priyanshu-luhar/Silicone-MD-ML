@@ -92,6 +92,97 @@ This component will leverage the large, reproducible structure ensembles generat
 
 ---
 
+# MLMD-ReaxFF: Accelerated Reactive MD for Si/Ag with Defects
+
+Machine Learning–accelerated Reactive Molecular Dynamics (MLMD) framework for Silicon wafers doped with Silver (Ag), including Schottky and Frenkel defect evolution under an NVT temperature schedule.
+
+This system replaces expensive long-timescale ReaxFF RMD trajectories with learned recurrent models that approximate:
+
+- Structure minimization
+- NVT thermal evolution
+- Potential energy trajectory
+- Defect evolution over time
+
+---
+
+# Problem Setting
+
+We model:
+
+• Silicon wafer
+• Ag dopant atoms
+• Schottky defects
+• Frenkel defects
+• NVT temperature schedule
+
+Traditional ReaxFF RMD is expensive due to:
+
+- Small timestep requirements
+- Charge equilibration
+- Long trajectory lengths
+- Multiple temperature ramps
+
+This project builds two RNN-based models to approximate that process.
+
+---
+
+# Inputs
+
+1. ReaxFF ForceField file
+2. Starting structure (.xyz)
+3. Temperature schedule (K)
+4. RMD timestep (dt)
+5. Step schedule per temperature segment
+
+---
+
+# Outputs
+
+1. MLMD minimized structure
+2. MLMD final structure
+3. Expected potential energy over steps
+4. Expected number of Schottky defects over steps
+5. Expected number of Frenkel defects over steps
+
+---
+
+# Architecture Overview
+
+```mermaid
+flowchart TD
+
+  A[ForceField File] --> B[ReaxFF Parser]
+  B --> C[ForceField Vector]
+
+  D[Starting Structure .xyz] --> E[Structure Parser]
+  E --> F[Geometry Features]
+  F --> G[Initial Bond Defect Detection]
+
+  H[Temperature Schedule] --> I[Schedule Expander]
+  J[Step Schedule] --> I
+  K[RMD Timestep] --> L[Time Conditioning]
+
+  I --> M[Per-Step Conditioning: T(t), step_id, dt]
+
+  C --> N[Minimizer RNN]
+  F --> N
+  M --> N
+  N --> O[MLMD Minimized Structure]
+
+  O --> P[Dynamics RNN]
+  C --> P
+  M --> P
+
+  P --> Q[Predicted Structure Trajectory]
+  P --> R[Expected Potential Energy]
+  P --> S[Raw Defect Signals]
+
+  Q --> T[Defect Estimator]
+  T --> U[Expected Schottky over Steps]
+  T --> V[Expected Frenkel over Steps]
+
+  Q --> W[MLMD Final Structure]
+
 ## Status
 
 Active development. Structure generation and defect modeling are complete; machine learning components are in progress.
